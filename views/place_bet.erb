@@ -1,0 +1,22 @@
+<div class="container game_start">
+
+  <h1 id="bet"><%=session[:player_name]%> has <u>$<%=session[:player_pool]%></u></h1>
+
+  <% if session[:player_pool] < 1 %>
+    <h4>Looks like you're out of cash!</h4>
+
+    <form action='/set_name' method='get'>
+      <input type='submit' class='btn' value='Play Again' />
+    </form>
+  <% else %>
+    <h4>How much would you like to bet this round?</h4>
+
+    <form action='/place_bet' method='post'>
+        <div class="input-append">
+          <input class='span2' type='text' name='bet' />
+          <input type='submit' class='btn' value='Place Bet' />
+        </div>
+    </form>
+  <% end %>
+
+</div>

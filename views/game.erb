@@ -1,0 +1,141 @@
+<div id="game">
+
+  <div class="row announcement">
+      <% if @loser %>
+        <div class="alert alert-error"><%= @loser %></div>
+      <% elsif @winner %>
+        <div class="alert alert-success"><%= @winner %></div>
+      <% elsif @tie %>
+        <div class="alert alert-info"><%= @tie %></div>
+      <% end %>
+  </div>
+
+  <div class="container board">
+
+    <div class="span12">
+
+      <div class="row-fluid">
+
+        <div class="span9">
+          <div class="well well-lg">
+              <% session[:dealer_cards].each_with_index do |card, i| %>
+                <% if session[:turn] != "dealer" && i == 0 %>
+                  <img class="card_image" src="/images/cards/cover.jpg">
+                <% else %>
+                  <img class="card_image" src="<%= to_image(card) %>" />
+                <% end %>
+              <% end %>
+          </div>
+        </div>
+
+        <div class="span3">
+          <div class="row">
+            <p class="player_heading">Dealer's Cards</p>
+          </div>
+
+        <% if session[:turn] == "dealer" %>
+          <div class="row">
+              <div class="span8 sum">
+                <p>SUM</p>
+              </div>
+
+              <div class="span4 total">
+                <%= calculate_total(session[:dealer_cards]) %>
+              </div>
+
+          </div>
+
+          <% if @show_reveal_card_button %>
+            <p class="dealer_hits">The dealer has chosen to hit.</p>
+
+            <form action="/game/dealer/hit" method="post">
+              <input id="reveal" type="submit" class="btn" value="Click to reveal new card ->" />
+            </form>
+          <% end %>
+        <% end %>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <div class="span12">
+
+      <div class="row-fluid">
+
+        <div class="span9">
+
+          <div class="well well-lg">
+            <% session[:player_cards].each do |card| %>
+              <img class="card_image" src="<%= to_image(card) %>" />
+            <% end %>
+          </div>
+
+        </div>
+
+        <div class="span3">
+
+          <div class="row">
+            <p class="player_heading">Your Cards</p>
+          </div>
+
+          <div id="player_money" class="row">
+            <div class="span2 title">$</div>
+            <% if @player_win %>
+              <div class="span4 money"><%= @old_player_pool %></div>
+              <div class="span3 title won">+</div>
+              <div class="span3 money won">$<%= session[:bet] %></div>
+            <% elsif @dealer_win %>
+              <div class="span4 money"><%= @old_player_pool %></div>
+              <div class="span3 title lost">-</div>
+              <div class="span3 money lost">$<%= session[:bet] %></div>
+            <% else %>
+              <div class="span4 money"><%= session[:player_pool] %></div>
+              <div class="span3 title">BET</div>
+              <div class="span3 money">$<%= session[:bet] %></div>
+            <% end %>
+          </div>
+
+          <div class="row">
+
+            <div class="span8 sum">
+              <p>SUM</p>
+            </div>
+
+            <div class="span4 total">
+              <%= calculate_total(session[:player_cards]) %>
+            </div>
+
+          </div>
+
+          <div class="row status">
+            <% if @player_stay %>
+              <p class="stay">STAY</p>
+            <% end %>
+          </div>
+
+          <div class="row hit_or_stay">
+
+            <% if @show_hit_or_stay_buttons %>
+
+              <h3>What would you like to do?</h3>
+
+              <form action='/game/player/hit' method='post'>
+                <input id="hit_form" type="submit" class="btn btn-success" value="Hit"></input>
+              </form>
+
+              <form  action='/game/player/stay' method='post'>
+                <input id="stay_form" type="submit" class="btn btn-warning" value="Stay"></input>
+              </form>
+
+            <% end %>
+
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
