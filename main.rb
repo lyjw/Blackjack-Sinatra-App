@@ -72,7 +72,6 @@ helpers do
 end
 
 before do
-  session[:turn] = nil
   @show_hit_or_stay_buttons = true
 end
 
